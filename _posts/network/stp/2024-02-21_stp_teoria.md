@@ -1,6 +1,6 @@
 ---
-title: STP, teoría
-author: AK
+title: STP - teoría
+author: Arodi
 date: 2024-02-21
 category: network
 tags: [layer 2, protocolo, stp]
@@ -42,7 +42,7 @@ Pasos para colocar un puerto en estado forwarding.
 1. Seleccionar un root bridge, el cual es el switch con menor BID. Solo puede existir un root bridge por red. Todos los puertos en el root bridge son puertos Forwarding.
 2. Seleccionar un puerto root basado en el costo menor del camino root (root path cost). Cada switch nonroot tendra un solo puerto root, el puerto root es el puerto por el cual el nonroot bridge tiene el mejor camino hacia el root bridge.
 3. Seleccionar un puerto Designated para cada enlace. Cada enlace tiene un puerto Designated, es el puerto del switch que tiene menor BID.
-4. Los root ports y designated ports cambian al estado Forwarding y los otros puertos permanecen en estado Blocking.
+4. Los puertos root y puertos designated cambian al estado Forwarding y los otros puertos permanecen en estado Blocking.
 
 ![STP ports]({{ site.baseurl }}/images/stp/state_ports.png)
 _State ports_
