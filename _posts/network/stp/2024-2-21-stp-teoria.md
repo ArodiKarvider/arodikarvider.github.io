@@ -44,7 +44,7 @@ Pasos para colocar un puerto en estado forwarding.
 3. Seleccionar un puerto Designated para cada enlace. Cada enlace tiene un puerto Designated, es el puerto del switch que tiene menor BID.
 4. Los puertos root y puertos designated cambian al estado Forwarding y los otros puertos permanecen en estado Blocking.
    
-![STP ports](/images/stp/state_ports.png)
+![STP ports](/images/stp/stp_state.png)
 _State ports_
 
 ## STP
