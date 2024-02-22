@@ -1,10 +1,10 @@
 ---
-title: Writing a New Post
-author: cotes
-date: 2019-08-08 14:10:00 +0800
-categories: [Blogging, Tutorial]
-tags: [writing]
-render_with_liquid: false
+title: STP, teoría
+author: AK
+date: 2024-02-21
+category: network
+tags: [layer 2, protocolo, stp]
+published: true
 ---
 
 Una característica clave de una buena construcción de una red de comunicación es la resistencia. Una red resistente es capaz de mantener las fallas de dispositivo o de enlaces a través de la redundancia. La redundancia de una topología puede eliminar un simple punto de falla mediante el uso de múltiples enlaces, múltiples dispositivos o ambos. El STP ayuda a prevenir loops en la redundancia de switches de  una red.
