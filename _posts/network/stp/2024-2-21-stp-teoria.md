@@ -155,3 +155,42 @@ RSTP cambia y agrega al STP una manera de evitar la espera del STP timers, resul
 - RSTP agrega un mecanismo por el cual un switch puede remplazar su puerto raiz sin la espera de que el puerto entre en estado Forwarding (en algunas condiciones).
 - RSTP agrega un nuevo mecanismo por el cual puede remplazar su puerto Designated sin la espera de que el puerto entre en estado Forwarding (en algunas condiciones).
 - RSTP baja el tiempo de espera para los casos en el que RSTP deba esperar un timer.
+
+RSTP también difiere de STP en algunas otras cosas. Como por ejemplo, en STP el root switch es el único que envia los Hello BPDU y los otros switches sólo actualizan y reenvían estos Hello BPDU. En cambio en RSTP cada switch independientemente si sea root o no genera su propio Hello BPDU, adicionalmente en RSTP se permite consultas entre vecinos, en lugar de esperar que el MaxAge expire. Este tipo de cambio en el protocolo ayuda a que el switch reaccione rápidamente y cambie la topologia RSTP.
+
+#### Estados y procesos
+STP y RSTP usan estados de puertos, pero con algunas diferencias. RSTP mantine los estados learning y forwarding, sin embargo RSTP no usa el estado listening definido por STP y por ultimo RSTP renombra el estado blocking al estado discarding, redefiniendo ligeramente su uso.
+RSTP usa el estado discarding que define dos estados, los estados disabled y blocking. Blocking puede trabajar fisicamente, pero STP/RSTP no reenvia trafico por esa interfaz para evitar loops, disabled significa que la interfaz estada administrativamente deshabilitado. RSTP combina estos dos estados en un simple estado llamado discarding.
+
+![Comparation port states](/images/stp/comparation_port_states.png)
+_Comparacion de los estados de puertos_
+
+RSTP tiene algunos cambios en el proceso y en el contenido del mensaje para aumentar la velocidad del STP convergence. Por ejemplo, STP espera un tiempo (forward delay) en los estados listening y learning para cambiar al estado forwarding. La razon por la que STP tarda, es que a todos los switches se les dice que cronometren el tiempo de descarte de las tablas MAC en el estado listening con los mensajes BPDU cuando la topologia cambia, ya que cuando la topologia cambia, las tablas MAC existentes pueden causar loops. Luego el estado cambia al estado learning para aprender las nuevas entradas MAC, para asi al final entrar al estado forwarding. Remover las entradas de la tabla MAC es buena, pero esto puede causar la necesidad de esperar el tiempo de Forward Delay timer que por defecto es de 15 segundos, dando un total de 30 segundos para alcanzar el estado forwarding.
+
+RSTP convergence es mas rapido, ya que evita depender de temporizadores. Los switches en RSTP se comunican entre si cuando la topologia cambia, estos mensajes le indican a los switches vecinos remover las entradas MAC que podrian causar loops pontenciales sin la neceisdad de esperar un temporizador. Como resultado se tiene mas escenarios en el que un puerto en estado discarding puede pasar inmediatamente a un estado forwarding, sin la necesidad de esperar y sin pasar a usar el estado learning.
+
+#### Rol del puerto Alternate (Root)
+![rstp_port_roles.png](/images/stp/rstp_port_roles.png)
+_Roles de puerto en RSTP_
+
+Con STP cada nonroot switch elige un puerto Root. RSTP sigue las mismas reglas para escoger el puerto Root y el puerto Designated, pero luego el RSTP toma otro paso para escoger otros posibles puertos root, llamados puertos Alternate, que es el puerto que no es ni Root, ni Designated o Backup.
+Para ser un puerto Alternate, ambos, el puerto Root y el puerto Alternate deben recibir Hellos que identifiquen al mismo switch root.
+Un puerto Alternate basicamente actua como el segundo mejor puerto Root. Un puerto Alternate puede reemplazar un puerto Root muy rapido sin requerir la espera de estados intermedios de RSTP. Por ejemplo, cuando el puerto root cae o cuando deja de recibir mensajes Hellos, el switch cambia el rol y el estado del puerto anterior de la siguiente maneara.
+- El rol del puerto root cambia a un puerto disabled.
+- El estado pasa de Forwarding a Discarding (equivalente al estado Blocking en STP)
+- El puerto Alternate cambia el rol a puerto root, y al estado Forwaring sin la espera de un timer.
+
+El nuevo puerto root no necesita pasar tiempos en otros estados, como en el estado learning, es movido inmediatamente al estado forwarding.
+
+#### Rol del puerto Backup (Designated)
+Puerto Backup es como un nuevo rol en RSTP, mientras que un puerto alternate fue creado para reemplazar de forma rapida a un puerto root, el puerto backup fue creado para  reemplazar de forma rapida a un puerto designated en un mismo dominio de colision (cuando se usa un hub) sin la necesidad de esperar mucho tiempo moverse desde el estado discarding al estado forwarding.
+
+![rstp_backup_port.png](/images/stp/rstp_backup_port.png)
+_Puerto Backup en RSTP_
+
+#### Tipos de puertos
+RSTP usa algunos terminos para referirse a los diferentes enlaces y puertos conectados. Los puertos de los enlaces conectados entre dos switches son considerados poin-to-point, ya que son conectados unicamente entre dos dispositivos. Sin embargo RSTP clasifica point-to-point en dos categorias. Puertos point-to-point que conectan dos switches y no son el borde de la red, simplemente son llamados point-to-point. Los puertos que estan conectados a dispositivos finales de la red, como una PC o servidor son llamados puertos point-to-point edge o simplemente puerto edge. 
+RSTP usa el termino shared para describir los puertos conectados a un hub, el termino compartido viene del hecho de que comparte Ethernet, el hub tambien fuerza a que el puerto conectado en los switches sea half-duplex. RSTP asume que todos los puertos half-duplex sean puertos shared. RSTP convergence es mas lenta cuando es un puerto shared a comparacion a un puerto point-to-point.
+
+![rstp_link_types.png](/images/stp/rstp_link_types.png)
+_Tipos de enlace en RSTP_
