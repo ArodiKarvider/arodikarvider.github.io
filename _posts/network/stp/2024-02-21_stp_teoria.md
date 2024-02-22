@@ -4,7 +4,7 @@ title: STP, Teoría.
 category: network
 tags: protocolo switch "layer 2" draft
 date: 2024-02-21
-published: false
+published: true
 ---
 
 Una característica clave de una buena construcción de una red de comunicación es la resistencia. Una red resistente es capaz de mantener las fallas de dispositivo o de enlaces a través de la redundancia. La redundancia de una topología puede eliminar un simple punto de falla mediante el uso de múltiples enlaces, múltiples dispositivos o ambos. El STP ayuda a prevenir loops en la redundancia de switches de  una red.
@@ -44,5 +44,5 @@ Pasos para colocar un puerto en estado forwarding.
 3. Seleccionar un puerto Designated para cada enlace. Cada enlace tiene un puerto Designated, es el puerto del switch que tiene menor BID.
 4. Los root ports y designated ports cambian al estado Forwarding y los otros puertos permanecen en estado Blocking.
 
-![STP ports]({{ site.baseurl }}/images//stp/state_ports.png)
+![STP ports]({{ site.baseurl }}/images/stp/state_ports.png)
 _State ports_
