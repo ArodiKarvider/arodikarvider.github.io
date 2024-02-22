@@ -1,5 +1,5 @@
 ---
-title: STP, teoría
+title: STP - teoría
 author: AK
 date: 2024-02-21
 category: network
