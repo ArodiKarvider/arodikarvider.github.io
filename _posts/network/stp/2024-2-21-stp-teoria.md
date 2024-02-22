@@ -9,30 +9,30 @@ published: true
 
 Una característica clave de una buena construcción de una red de comunicación es la resistencia. Una red resistente es capaz de mantener las fallas de dispositivo o de enlaces a través de la redundancia. La redundancia de una topología puede eliminar un simple punto de falla mediante el uso de múltiples enlaces, múltiples dispositivos o ambos. El STP ayuda a prevenir loops en la redundancia de switches de  una red.
 
-![stp](images/stp/redundancia.png)
+![stp](/images/stp/redundancia.png)
 _redundancia de switches_
 
 ## Introducción
 ### ¿Cuáles son los problemas que puede tener una red de switches redundantes?
 Broadcast storms: Cada switch transmite broadcasts sin cesar, consumiendo significativamente parte de la capacidad de un enlace.
 
-![broadcast storms](images/stp/broadcast_storms.png)
+![broadcast storms](/images/stp/broadcast_storms.png)
 _Broadcast storms_
 
 Multiple-frame transmission: Se envía multiples copias de tramas unicast al destino, confundiendo al host y causando errores irrecuperables.
 
-![Multiple-frame transmission](images/stp/multiple-frame_transmission.png)
+![Multiple-frame transmission](/images/stp/multiple-frame_transmission.png)
 _Multiple-frame transmission_
 
 MAC database instability: Se produce inestabilidad en el contenido de la tabla de direcciones MAC, el switch continuamente actualiza la tabla de direcciones MAC, resultando en tramas enviadas a lugares equivocados.
 
-![MAC database instability](images/stp/mac_database_instability.png)
+![MAC database instability](/images/stp/mac_database_instability.png)
 _MAC database instability_
 
 ### ¿Qué es STP?
 STP (Spanning Tree Protocol) es un estandar del comite IEEE definido como 802.1D. STP coloca ciertos puertos en estado Forwarding que actuan normal (reenvían y reciven tramas). Sin embargo, las interfaces en estado Blocking no procesa ninguna trama, excepto los mensajes STP (y algunos mensages generales). Las interfaces bloqueadas no reenvían tramas, no aprenden direcciones MAC de tramas recibidas y ni procesan tramas. STP crea árboles que asegura que exista únicamente un camino en cada segmento de red en cualquier momento. Si cualquier segmento experimenta una caída de conectividad, STP reconstruye un nuevo árbol para activar el previo inactivo, pero redundante camino.
 
-![STP](images/stp/stp.png)
+![STP](/images/stp/stp.png)
 _STP_
 
 ### ¿Qué es STA?
@@ -44,7 +44,7 @@ Pasos para colocar un puerto en estado forwarding.
 3. Seleccionar un puerto Designated para cada enlace. Cada enlace tiene un puerto Designated, es el puerto del switch que tiene menor BID.
 4. Los puertos root y puertos designated cambian al estado Forwarding y los otros puertos permanecen en estado Blocking.
    
-![STP ports](images/stp/state_ports.png)
+![STP ports](/images/stp/state_ports.png)
 _State ports_
 
 ## STP
@@ -56,7 +56,7 @@ Para entender el proceso de seleccion del STA, se tiene que entender los mensaje
 #### BID
 El BID es un valor unico de cada switch que contine de 2 bytes del bridge ID y 6 bytes del system ID, el system ID esta basado en la direccion MAC. En pocas palabras el BID consta de 8 bytes. Por defecto el bridge ID es de 32,768, el switch con el BID menor es convertido en el root bridge. Sin embargo, si el valor de la prioridad por defecto no es cambiado. El switch con el MAC de menor valor es convertido en el root.
 
-![BID](images/stp/bid.png)
+![BID](/images/stp/bid.png)
 _Campos en el BID_
 
 #### BPDU
@@ -76,7 +76,7 @@ La seleccion del switch root inicia con todos los switches clamando ser el root,
 ### Seleccion del puerto root
 La selecion del puerto root inicia despues de que se haya seleccionado el switch root. El switch root envia Hello BPDUs con el valor del root cost en 0 a todos los switches, cuando estos mensajes llegan a un switch, el switch le suma un valor, esto dependiendo del costo de la ruta y estos a su vez reenvian el Hello BPDU con el menor root cost a los demas switches. Para asi al final convertir el puerto con menor root cost en el puerto root y cada puerto root entra en estado forwarding.
 
-![Costo de la ruta root](images/stp/root_path_cost_ex.png)
+![Costo de la ruta root](/images/stp/root_path_cost_ex.png)
 _Costo de la ruta root_
 
 Los switches necesitan una manera de desempatar, en caso de que el valor del root cost sean iguales en dos o mas interfaces. El switch aplica 3 maneras de desempatar las interfaces (ruta) empatadas
@@ -89,7 +89,7 @@ El paso final del STA para construir la topologia STP es elegir el puerto design
 
 Nota: Los puertos conectados a un dispositivo final se convierten en puerto designated y entran en el estado forwarding, ya que los dispositivos finales no ejecutan el protocolo STP, asi dejando al puerto del switch convertirse en puerto designated.
 
-![stp port decision](images/stp/stp_port_decision.png)
+![stp port decision](/images/stp/stp_port_decision.png)
 _Decisión de puertos_
 
 ### Configuración de la topologia STP
@@ -98,7 +98,7 @@ Generalmente STP trabaja por defecto en los switches, teniendo un BID por defect
 Para cambiar el BID por defecto, se debe configurar la prioridad del BID, por defecto la prioridad es de 32,768, si se coloca una prioridad menor a todos, este se convertira en el root bridge.
 El costo del puerto tiene valores por defecto para cada interfaz y para cada VLAN. Se puede configurar estos valores, que puede impactar en la calculacion del root path cost. Para favorecer un enlace, se debe colocar un valor bajo o de lo contrario evita usar el enlace, ya que tendra un root path cost alto para alcanzar al root bridge.
 
-![Path cost](images/stp/path_cost.png)
+![Path cost](/images/stp/path_cost.png)
 _Costo de la ruta en interfaces_
 
 ## STP vs RSTP
@@ -117,7 +117,7 @@ Cuando un switch falla en recibir un Hello, este sabe que podria esta ocurriendo
 #### STP Convergence
 STP convergence es el proceso por el cual los switches colectivamente realizan algun cambio a la topologia LAN. Los switches determinan cual de ellos necesitan cambiar los puerto al estado de bloqueo y cuales al estado de reenvio. Este proceso requiere el uso de tres timers, todos los switch usan el timer colocado en el root switch, el cual el root switch envia periodicamente en los mensajes Hello BPDU.
 
-![STP timer](images/stp/stp_timer.png)
+![STP timer](/images/stp/stp_timer.png)
 _STP timers_
 
 Si un switch no recibe un Hello BPDU en el tiempo esperado (configurado en el hello timer), el switch continuara trabajando normal. Sin embargo, si el Hello BPDU no llegan a aparecer en el tiempo del MaxAge, el switch reaciona y toma los pasos para cambiar la topologia. El MaxAge esta configurado por defecto en 20 segundos (10 veces el tiempo del hello timer). Esto quiere decir que un switch duriaria 20 segundos en reaccionar si no le llega un Hello.
@@ -133,12 +133,12 @@ Cuando un puerto necesita cambiar del estado Blocking al estado Forwarding, el s
 - Listening: Igual al estado Blocking, la interfaz no reenvia tramas. El switch remueve la antigua tabla MAC y no aprendera ninguna direccion MAC durante este periodo. Estas tablas MAC podrian causar problemas de bucle temporales.
 - Learning: Las interfaces en este estado aun no reenvian tramas, pero el switch inicia el aprendizaje de las direcciones MAC de las tramas recibidas en la interfaz.
 
-![stp port state](images/stp/stp_port_state.png)
+![stp port state](/images/stp/stp_port_state.png)
 _Estados de los puertos STP_
 
 STP cambia la interfaz del estado Blocking a Listening, despues a Learning, para asi al final entrar en estado Forwarding. Para cada estado intermedio, STP usa el tiempo de Forward Delay timer, que por defecto es 15 segundos. Dando como resultado que el cambio del estado Blocking a Forwarding tome 30 segundos. En adicional, el switch podria esperar el MaxAge timer (20 segundos por defecto) antes de iniciar a mover una interfaz del estado Blocking al estado Forwarding.
 
-![stp convergence](images/stp/stp_convergence.png)
+![stp convergence](/images/stp/stp_convergence.png)
 _STP convergence_
 
 ### RSTP
