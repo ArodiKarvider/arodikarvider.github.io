@@ -29,7 +29,7 @@ MAC database instability: Se produce inestabilidad en el contenido de la tabla d
 _MAC database instability_
 
 ### ¿Qué es STP?
-STP (Spanning Tree Protocol) es un estandar del comite IEEE definido como 802.1D. STP coloca ciertos puertos en estado Forwarding que actuan normal (reenvían y reciven tramas). Sin embargo, las interfaces en estado Blocking no procesa ninguna trama, excepto los mensajes STP (y algunos mensages generales). Las interfaces bloqueadas no reenvían tramas, no aprenden direcciones MAC de tramas recibidas y ni procesan tramas. STP crea arboles que asegura que exista únicamente un camino en cada segmento de red en cualquier momento. Si cualquier segmento experimenta una caída de conectividad, STP reconstruye un nuevo arbol para activar el previo inactivo, pero redundante camino.
+STP (Spanning Tree Protocol) es un estandar del comite IEEE definido como 802.1D. STP coloca ciertos puertos en estado Forwarding que actuan normal (reenvían y reciven tramas). Sin embargo, las interfaces en estado Blocking no procesa ninguna trama, excepto los mensajes STP (y algunos mensages generales). Las interfaces bloqueadas no reenvían tramas, no aprenden direcciones MAC de tramas recibidas y ni procesan tramas. STP crea árboles que asegura que exista únicamente un camino en cada segmento de red en cualquier momento. Si cualquier segmento experimenta una caída de conectividad, STP reconstruye un nuevo árbol para activar el previo inactivo, pero redundante camino.
 
 ![STP](/images/stp/stp.png)
 _STP_
@@ -42,7 +42,7 @@ Pasos para colocar un puerto en estado forwarding.
 1. Seleccionar un root bridge, el cual es el switch con menor BID. Solo puede existir un root bridge por red. Todos los puertos en el root bridge son puertos Forwarding.
 2. Seleccionar un puerto root basado en el costo menor del camino root (root path cost). Cada switch nonroot tendra un solo puerto root, el puerto root es el puerto por el cual el nonroot bridge tiene el mejor camino hacia el root bridge.
 3. Seleccionar un puerto Designated para cada enlace. Cada enlace tiene un puerto Designated, es el puerto del switch que tiene menor BID.
-4. Los root ports y designated ports cambian al estado Forwarding y los otros puertos permanecen en estado Blocking.
+4. Los puertos root y puertos designated cambian al estado Forwarding y los otros puertos permanecen en estado Blocking.
 
 ![STP ports]({{ site.baseurl }}/images/stp/state_ports.png)
 _State ports_
