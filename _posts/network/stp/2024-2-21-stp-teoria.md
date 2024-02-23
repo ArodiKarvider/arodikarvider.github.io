@@ -228,8 +228,8 @@ Campos del BID en PVST+
 
 Nota: Rapid PVST+ es simplemente la implementacion de PVST+ en RSTP, asi que tiene la misma caracteristica de RSTP, pero con instancias separadas para cada VLAN.
 
-### Caracteristicas opcionales del STP
-#### EtherChannel
+## Caracteristicas opcionales del STP
+### EtherChannel
 Una de las mejores formas de bajar el tiempo de STP convergence es evitarlo por completo. EtherChannel es una manera de evitar el STP convergence cuando se produce una falla en el puerto o en el cable.
 
 EtherChannel combina multiples segmentos paralelos (hasta ocho) de igual velocidades entre pares de switches para trabajar al mismo tiempo. Los switches tratan al EtherChannel como una sola interfaz STP, dando como resultado de que no ocurra el STP convergence si por lo menos uno de los enlaces en el EtherChannel sigue funcionando. Si no se tiene configurado EtherChannel a los enlaces paralelos en los switches, STP bloquea todos los enlaces excepto uno.
@@ -238,14 +238,14 @@ EtherChannel combina multiples segmentos paralelos (hasta ocho) de igual velocid
 
 Nota: EtherChannel se puede configurar tanto en un switch como en un router, llamado EtherChannel capa 2 y EtherChannel capa 3 respectivamente.
 
-#### PortFast para PVST+
+### PortFast para PVST+
 PortFast le permite a un puerto switch pasar del estado blocking al estado forwarding de forma inmediata, sin antes pasar por los estados intermedios (listening y learning). Sin embar, no se debe habilitar en los puertos que se vayan a conectar a un bridge, switch u otro dispositivo STP, habilitar PortFast en los puertos que se vayan a conectar a estos dispositivos puede crear loops que los estados listening y learning intentan evitar.
 
 Es más apropiado habilitar PortFast en las conexiones con dispositivos finales. Si se conecta un dispositivo final a un puerto con PortFast el switch movera el puerto del estado blocking al estado forwarding para el envio de tramas de forma inmediata. Sin PortFast el switch debe esperar la confirmacion de que el puerto es un puerto designated y pasar por los estados temporales, listening y learning, esto en STP.
 
 RSTP incluye PortFast, esto en los tipos de puerto, para ser mas especifico en los puerto point-to-point edge, RSTP convergece es mas rapido en estos puertos, ya que no pasa por el estado learning, el cual es la misma idea que el PortFast de Cisco. Los switches Cisco habilitan los puertos RSTP point-to-point edge mediante PortFast.
 
-#### BPDU Guard
+### BPDU Guard
 STP y RSTP abren diferentes tipos de exposicion de seguridad en la LAN.
 - Un atacante podria conectar un switch malicioso a uno de los switches que pertenezca a la red, un switch con la prioridad baja se convertiria en el switch root, así cambiando la topologia. La nueva topologia podria bajar el rendimiento de la red existente.
 - Un atacante podría conectase a multiples puertos, a multiples switches, convertise en root y reenviar mucho trafico a la LAN. Sin que personal de la red se de cuenta, el atacante podria usar un analizador de LAN para copiar una gran cantidad de tramas enviadas a traves de la LAN.
