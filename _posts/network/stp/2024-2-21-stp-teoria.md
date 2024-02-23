@@ -56,7 +56,7 @@ Para entender el proceso de seleccion del STA, se tiene que entender los mensaje
 #### BID
 El BID es un valor unico de cada switch que contine de 2 bytes del bridge ID y 6 bytes del system ID, el system ID esta basado en la direccion MAC. En pocas palabras el BID consta de 8 bytes. Por defecto el bridge ID es de 32,768, el switch con el BID menor es convertido en el root bridge. Sin embargo, si el valor de la prioridad por defecto no es cambiado. El switch con el MAC de menor valor es convertido en el root.
 
-![BID](/images/stp/bid.png)
+![BID](/images/stp/stp_bid.png)
 _Campos en el BID_
 
 #### BPDU
@@ -194,3 +194,63 @@ RSTP usa el termino shared para describir los puertos conectados a un hub, el te
 
 ![rstp_link_types.png](/images/stp/rstp_link_types.png)
 _Tipos de enlace en RSTP_
+
+- Tipo de enlace point-to-point: RSTP mejora el STP convergence en los enlaces full-duplex. RSTP reconoce la perdida del camino al root bridge a traves del puerto root en 6 segundos, basada en el valor de 3 Hello timer de 2 segundos.
+- Tipo de enlace edge/PortFast: RSTP mejora el STP convergence en los puerto edge, pasando inmediatamente de blocking a forwarding cuando un dispositivo final es conectado.  
+- Tipo de enlace shared: RSTP no hace nada diferente al STP en los enlaces shared. Esto no importa mucho ya que en la actualidad todos los switch son full-duplex.
+
+### Variedades de STP
+Se tiene muchas variedades del protocolo STP
+- STP: Especificacion original de STP, definido en IEEE 802.1D, previene  topologias con loops en redes con enlaces redundantes.
+- PVST+: Per-VLAN Spanning Tree Plus  (PVST+) es una mejora de Cisco que proporciona la separacion de STP para cada instancia de VLAN configurada en una red.
+- RSTP: RSPT o IEEE 802.1w, es una evolucion que mejora la velocidad STP convergence. Sin embargo RSTP solo proporciona una unica instacia STP.
+- Rapid PVST+: Rapit PVST+ es una mejora de Cisco para RSTP que usa PVST+, proporcionando instancias separadas de 802.1w por VLAN.
+- MSTP y MST: Multiple Spanning Tree Protocol (MSTP) es un estandar IEEE inspirado por la anterior implementacion propietaria de Cisco, Multiple Instance STP (MISTP). MSTP mapea multiples VLAN en la misma instancia spanning thee. La implementacion de Cisco para MSTP es Multiple Spanning Tree (MST), el cual proporciona hasta 16 instancias RSTP y combina muchos VLAN de la topologia fisica y logica en una instancia RSTP en comun. 
+
+#### Operacion PVST+
+En el entorno PVST+ uno puede configurar los parametros del spanning-tree para que las tramas se reenvien a una sola VLAN. Se puede hacer esto configurando un switch para que se seleccione como root para una VLAN y que otro switch sea seleccionado como root para otra VLAN diferente.
+
+![PVST+](/images/stp/pvstplus.png)
+
+PVST+ tiene las siguientes caracteristicas:
+- Se puede configurar PVST+ por VLAN, permitiendo el uso completo de los enlaces redundantes.
+- Cada instancia spanning tree por VLAN agrega mas ciclos de uso al CPU de los switches de la red.
+
+##### System ID extendido
+PVST+ requiere separar las instancias del spanning tree para cada VLAN. El campo BID en el BPDU debe llevar la informacion del VLAN ID.
+
+![pvstplus_bid.png](/images/stp/pvstplus_bid.png)
+
+Campos del BID en PVST+
+- Bridge Priority: Un campo de 4 bit es usado para el bridge priority. Sin embargo los valores aumentan de 4096 de 4096 y no de 1 en 1, ya que usa los primeros 4 bits y no todos los 16 bits. Los 12 bits sobrantes se usa para las VLANs.
+- Extended Systen ID: Un campo de 12 bits que es usado para el VID en PVST+.
+- MAC Address: Un cambo de 6 bytes con la direccion MAC del switch.
+
+Nota: Rapid PVST+ es simplemente la implementacion de PVST+ en RSTP, asi que tiene la misma caracteristica de RSTP, pero con instancias separadas para cada VLAN.
+
+### Caracteristicas opcionales del STP
+#### EtherChannel
+Una de las mejores formas de bajar el tiempo de STP convergence es evitarlo por completo. EtherChannel es una manera de evitar el STP convergence cuando se produce una falla en el puerto o en el cable.
+
+EtherChannel combina multiples segmentos paralelos (hasta ocho) de igual velocidades entre pares de switches para trabajar al mismo tiempo. Los switches tratan al EtherChannel como una sola interfaz STP, dando como resultado de que no ocurra el STP convergence si por lo menos uno de los enlaces en el EtherChannel sigue funcionando. Si no se tiene configurado EtherChannel a los enlaces paralelos en los switches, STP bloquea todos los enlaces excepto uno.
+
+![EtherChannel](/images/stp/etherchannel.png)
+
+Nota: EtherChannel se puede configurar tanto en un switch como en un router, llamado EtherChannel capa 2 y EtherChannel capa 3 respectivamente.
+
+#### PortFast para PVST+
+PortFast le permite a un puerto switch pasar del estado blocking al estado forwarding de forma inmediata, sin antes pasar por los estados intermedios (listening y learning). Sin embar, no se debe habilitar en los puertos que se vayan a conectar a un bridge, switch u otro dispositivo STP, habilitar PortFast en los puertos que se vayan a conectar a estos dispositivos puede crear loops que los estados listening y learning intentan evitar.
+
+Es más apropiado habilitar PortFast en las conexiones con dispositivos finales. Si se conecta un dispositivo final a un puerto con PortFast el switch movera el puerto del estado blocking al estado forwarding para el envio de tramas de forma inmediata. Sin PortFast el switch debe esperar la confirmacion de que el puerto es un puerto designated y pasar por los estados temporales, listening y learning, esto en STP.
+
+RSTP incluye PortFast, esto en los tipos de puerto, para ser mas especifico en los puerto point-to-point edge, RSTP convergece es mas rapido en estos puertos, ya que no pasa por el estado learning, el cual es la misma idea que el PortFast de Cisco. Los switches Cisco habilitan los puertos RSTP point-to-point edge mediante PortFast.
+
+#### BPDU Guard
+STP y RSTP abren diferentes tipos de exposicion de seguridad en la LAN.
+- Un atacante podria conectar un switch malicioso a uno de los switches que pertenezca a la red, un switch con la prioridad baja se convertiria en el switch root, así cambiando la topologia. La nueva topologia podria bajar el rendimiento de la red existente.
+- Un atacante podría conectase a multiples puertos, a multiples switches, convertise en root y reenviar mucho trafico a la LAN. Sin que personal de la red se de cuenta, el atacante podria usar un analizador de LAN para copiar una gran cantidad de tramas enviadas a traves de la LAN.
+- Los usuarios podrian dañar la LAN al comprar y usar un switch economico (uno que no utilice STP/RSTP) como un switch redundante, ya que si no se tiene la funcion STP/RSTP ningun puerto elegiria bloquearse y causaria un loop.
+
+La funcion Cisco BPDU Guard ayuda a defenderse de este tipo de problemas desabilitando el puerto si se recibe un mensaje BPDU en ese puerto. Esta caracteristica es util usarla en puertos que solamente sean de acceso y que nunca vayan a conectarse a otro switch.
+
+Además, la funcion BPDU Guard ayuda a prevenir problemas con PortFast, ya que PortFast deberia ser habilidado solamente en los puertos de acceso que se conectan a dispositivos finales y no a otros switches. Usar BPDU Guard junto con PortFast ayuda a que si se conecta por error otro switch, el puerto con BPDU Guard configurado desahabilite el puerto antes de crear loops.
