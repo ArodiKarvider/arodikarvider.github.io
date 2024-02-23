@@ -1,7 +1,6 @@
 ---
 title: STP - teoría
-author: Arodi
-date: 2024-02-23
+date: 2024-02-21
 category: teoría
 tags: [network, layer 2, protocolo, stp, etherchannel]
 published: true
