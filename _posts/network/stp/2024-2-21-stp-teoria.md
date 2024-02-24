@@ -18,7 +18,7 @@ Broadcast storms: Cada switch transmite broadcasts sin cesar, consumiendo signif
 ![broadcast storms](/images/stp/broadcast_storms.png)
 _Broadcast storms_
 
-Multiple-frame transmission: Se envía multiples copias de tramas unicast al destino, confundiendo al host y causando errores irrecuperables.
+Multiple-frame transmission: Se envía múltiples copias de tramas unicast al destino, confundiendo al host y causando errores irrecuperables.
 
 ![Multiple-frame transmission](/images/stp/multiple-frame_transmission.png)
 _Multiple-frame transmission_
@@ -29,68 +29,68 @@ MAC database instability: Se produce inestabilidad en el contenido de la tabla d
 _MAC database instability_
 
 ### ¿Qué es STP?
-STP (Spanning Tree Protocol) es un estandar del comite IEEE definido como 802.1D. STP coloca ciertos puertos en estado Forwarding que actuan normal (reenvían y reciven tramas). Sin embargo, las interfaces en estado Blocking no procesa ninguna trama, excepto los mensajes STP (y algunos mensages generales). Las interfaces bloqueadas no reenvían tramas, no aprenden direcciones MAC de tramas recibidas y ni procesan tramas. STP crea árboles que asegura que exista únicamente un camino en cada segmento de red en cualquier momento. Si cualquier segmento experimenta una caída de conectividad, STP reconstruye un nuevo árbol para activar el previo inactivo, pero redundante camino.
+STP (Spanning Tree Protocol) es un estándar del comite IEEE definido como 802.1D. STP coloca ciertos puertos en estado Forwarding que actuan normal (reenvían y reciven tramas). Sin embargo, las interfaces en estado Blocking no procesa ninguna trama, excepto los mensajes STP (y algunos mensages generales). Las interfaces bloqueadas no reenvían tramas, no aprenden direcciones MAC de tramas recibidas y ni procesan tramas. STP crea árboles que asegura que exista únicamente un camino en cada segmento de red en cualquier momento. Si cualquier segmento experimenta una caída de conectividad, STP reconstruye un nuevo árbol para activar el previo inactivo, pero redundante camino.
 
 ![STP](/images/stp/stp.png)
 _STP_
 
 ### ¿Qué es STA?
-El proceso usado por STP es llamado spanning-tree algorithm (STA), este escoge una interface que debera colocarse en estado de reenvio (forwarding state). Cualquiera interfaz que no sea colocada en estado Forwarding, el STA colocará esa interfaz en estado de bloqueo (blocking state).
+El proceso usado por STP es llamado spanning-tree algorithm (STA), este escoge una interface que deberá colocarse en estado de reenvío (forwarding state). Cualquiera interfaz que no sea colocada en estado forwarding, el STA colocará esa interfaz en estado de bloqueo (blocking state).
 
 Pasos para colocar un puerto en estado forwarding.
-1. Seleccionar un root bridge, el cual es el switch con menor BID. Solo puede existir un root bridge por red. Todos los puertos en el root bridge son puertos Forwarding.
-2. Seleccionar un puerto root basado en el costo menor del camino root (root path cost). Cada switch nonroot tendra un solo puerto root, el puerto root es el puerto por el cual el nonroot bridge tiene el mejor camino hacia el root bridge.
-3. Seleccionar un puerto Designated para cada enlace. Cada enlace tiene un puerto Designated, es el puerto del switch que tiene menor BID.
-4. Los puertos root y puertos designated cambian al estado Forwarding y los otros puertos permanecen en estado Blocking.
+1. Seleccionar un root bridge, el cual es el switch con menor BID. Sólo puede existir un root bridge por red. Todos los puertos en el root bridge son puertos forwarding.
+2. Seleccionar un puerto root basado en el costo menor del camino root (root path cost). Cada switch nonroot tendrá un sólo puerto root, el puerto root es el puerto por el cual el nonroot bridge tiene el mejor camino hacia el root bridge.
+3. Seleccionar un puerto designated para cada enlace. Cada enlace tiene un puerto designated, es el puerto del enlace que tiene menor BID.
+4. Los puertos root y puertos designated cambian al estado dorwarding y los otros puertos permanecen en el estado blocking.
    
 ![STP ports](/images/stp/stp_state.png)
 _State ports_
 
 ## STP
 ### Mensajes STP
-Los switches intercambian los mensajes de configuracion STP cada 2 segundos, por defecto, usa tramas multicast llamado Bridge Protocol Data Unit (BPDU). Los puertos bloqueados escuchan estos BPDUs para  detectar si el otro lado del enlace esta caido, esto requerira una recalculacion del STP. Una pieza de informacion que incluye en el BPDU es el Bridge ID (BID).
+Los switches intercambian los mensajes de configuracion STP cada 2 segundos, por defecto, usa tramas multicast llamado Bridge Protocol Data Unit (BPDU). Los puertos bloqueados escuchan estos BPDUs para  detectar si el otro lado del enlace esta caído, esto requerirá una recalculación del STP. Una pieza de información que incluye en el BPDU es el Bridge ID (BID).
 
-Para entender el proceso de seleccion del STA, se tiene que entender los mensajes enviados entre los switches tan bien como el concepto y el formato usado para identificar la identidad unica de cada switch.
+Para entender el proceso de selección del STA, se tiene que entender los mensajes enviados entre los switches tan bien como el concepto y el formato usado para identificar la identidad única de cada switch.
 
 #### BID
-El BID es un valor unico de cada switch que contine de 2 bytes del bridge ID y 6 bytes del system ID, el system ID esta basado en la direccion MAC. En pocas palabras el BID consta de 8 bytes. Por defecto el bridge ID es de 32,768, el switch con el BID menor es convertido en el root bridge. Sin embargo, si el valor de la prioridad por defecto no es cambiado. El switch con el MAC de menor valor es convertido en el root.
+El BID es un valor único de cada switch que contine de 2 bytes del bridge ID y 6 bytes del system ID, el system ID esta basado en la direccion MAC. En pocas palabras el BID consta de 8 bytes. Por defecto el bridge ID es de 32,768, el switch con el BID menor es convertido en el root bridge. Sin embargo, si el valor de la prioridad por defecto no es cambiada. El switch con el MAC de menor valor es convertido en el root.
 
 ![BID](/images/stp/stp_bid.png)
 _Campos en el BID_
 
 #### BPDU
-STP envia mensajes BPDU (Bridge Protocol Data Units), el cual cada switch usa para intercambiar informacion. El BPDU mas comun es el Hello BPDU.
+STP envía mensajes BPDU (Bridge Protocol Data Units), el cual cada switch usa para intercambiar información. El BPDU más común es el Hello BPDU.
 
-Campos mas importantes del Hello BPDU.
-- Root Bridge ID: Es el bridge ID (BID) del switch que envia el Hello BPDU, pensando que el es el switch root.
-- Bridge ID del emisor: El bridge ID del switch que envia el Hello BPDU.
+Campos más importantes del Hello BPDU.
+- Root Bridge ID: Es el bridge ID (BID) del switch que envía el Hello BPDU, pensando que él es el switch root.
+- Bridge ID del emisor: El bridge ID del switch que envía el Hello BPDU.
 - Root Cost del emisor: El costo entre el switch y el actual root.
 - Valor del timer en el switch root: Este incluye el Hello timer, MaxAge timer y forward delay timer.
 
-### Seleccion del switch root
-La seleccion del switch root es realizada a base del BID en el BPDU, el switch root es el switch con el menor valor de prioridad en el BID. Si ocurre un empate a base de la prioridad del BID, la porcion de la direccion MAC en el BID es usada, convirtiendo asi el switch con el menor valor de la direccion MAC en el switch root.
+### Selección del switch root
+La selección del switch root es realizada a base del BID en el BPDU, el switch root es el switch con el menor valor de prioridad en el BID. Si ocurre un empate a base de la prioridad del BID, la porción de la dirección MAC en el BID es usada, convirtiendo así el switch con el menor valor de la direccion MAC en el switch root.
 
-La seleccion del switch root inicia con todos los switches clamando ser el root, asi colocando su propia BID como root BID en el Hello BPDU. Si el switch escucha un BID mejor (menor BID), deja de enviar su propia BID como root y comienza a enviar el mejor BID. Eventualmente a todos los switches le llegara el mejor BID, asi convirtiendo a un solo switch en el switch root y todos sus puertos en puertos designed que entran en estado forwarding.
+La selección del switch root inicia con todos los switches clamando ser el root, asi colocando su propia BID como root BID en el Hello BPDU. Si el switch escucha un BID mejor (menor BID), deja de enviar su propia BID como root y comienza a reenviar el mejor BID. Eventualmente a todos los switches le llegara el mejor BID, así convirtiendo a un solo switch en el switch root y todos sus puertos en puertos designated que entran en estado forwarding.
 
-### Seleccion del puerto root
-La selecion del puerto root inicia despues de que se haya seleccionado el switch root. El switch root envia Hello BPDUs con el valor del root cost en 0 a todos los switches, cuando estos mensajes llegan a un switch, el switch le suma un valor, esto dependiendo del costo de la ruta y estos a su vez reenvian el Hello BPDU con el menor root cost a los demas switches. Para asi al final convertir el puerto con menor root cost en el puerto root y cada puerto root entra en estado forwarding.
+### Selección del puerto root
+La selección del puerto root (RP) inicia después de que se haya seleccionado el switch root. El switch root envía Hello BPDUs con el valor del root cost en 0 a todos los switches, cuando estos mensajes llegan a un switch, el switch le suma un valor, esto dependiendo del costo de la ruta y estos a su vez reenvían el Hello BPDU sumado menor a los demás switches. Para así al final convertir el puerto con menor root cost en el puerto root y cada puerto root entra en estado forwarding.
 
 ![Costo de la ruta root](/images/stp/root_path_cost_ex.png)
 _Costo de la ruta root_
 
-Los switches necesitan una manera de desempatar, en caso de que el valor del root cost sean iguales en dos o mas interfaces. El switch aplica 3 maneras de desempatar las interfaces (ruta) empatadas
+Los switches necesitan una manera de desempatar, en caso de que el valor del root cost sean iguales en dos o más interfaces. El switch aplica 3 maneras de desempatar las interfaces (ruta) empatadas
 1. Basada en el menor bridge ID del switch vecino.
 2. Basada en el menor priority port del switch vecino.
 3. Basada en el menor port number interno del switch vecino.
 
-### Seleccion del Puerto designated de cada enlace
-El paso final del STA para construir la topologia STP es elegir el puerto designated de cada enlace. El puerto designated (DP) de cada enlace es el puerto con menor costo Hello en el enlace. El no root switch reenvia un Hello con el valor del root path cost, el puerto del switch con el menor root path cost es seleccionado como puerto designated, si se tiene un empate, se desempata selecionando al puerto del switch que tenga menor BID. Para que asi al final todos los puertos designated entren en estado forwarding y los puertos que no son puertos root o puertos designated quedan en estado blocking.
+### Selección del Puerto designated de cada enlace
+El paso final del STA para construir la topología STP es elegir el puerto designated de cada enlace. El puerto designated (DP) de cada enlace es el puerto con menor costo Hello en el enlace. El no root switch reenvia un Hello con el valor del root path cost menor, el puerto del switch con el menor root path cost es seleccionado como puerto designated, si se tiene un empate, se desempata selecionando al puerto del switch que tenga menor BID. Para que así al final todos los puertos designated entren en estado forwarding y los puertos que no son puertos root o puertos designated quedan en estado blocking.
 
-Nota: Los puertos conectados a un dispositivo final se convierten en puerto designated y entran en el estado forwarding, ya que los dispositivos finales no ejecutan el protocolo STP, asi dejando al puerto del switch convertirse en puerto designated.
+Nota: Los puertos conectados a un dispositivo final se convierten en puerto designated y entran en el estado forwarding, ya que los dispositivos finales no ejecutan el protocolo STP, así dejando al puerto del switch convertirse en puerto designated.
 
 ![stp port decision](/images/stp/stp_port_decision.png)
 _Decisión de puertos_
-
+<!-- editando -->
 ### Configuración de la topologia STP
 Generalmente STP trabaja por defecto en los switches, teniendo un BID por defecto basada en el valor de la prioridad y direccion MAC del hardware del switch. Adicionalmente, la interfaz del switch tiene un costo base por defecto con la velocidad actual configurada en esa interfaz. Si un ingeniero de red quiere cambiar la topologia generalmente debe cambiar estas configuraciones.
 
