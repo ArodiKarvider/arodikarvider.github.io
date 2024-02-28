@@ -18,7 +18,7 @@ title: Arodi Karvider # the main title
 
 tagline: Blog sobre informática a un nivel profundo. # it will display as the sub-title
 
-description: Investigaciones de protocolos informaticos a un nivel profundo. # used by seo meta and the atom feed
+description: Investigaciones de protocolos informáticos a un nivel profundo. # used by seo meta and the atom feed
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
@@ -41,7 +41,7 @@ social:
     - https://github.com/arodikarvider # change to your github homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
-     - https://pa.linkedin.com/in/arodi-l%C3%B3pez-794782173
+    # - https://pa.linkedin.com/in/arodi-l%C3%B3pez-794782173
 
 google_site_verification: # fill in to your verification string
 
