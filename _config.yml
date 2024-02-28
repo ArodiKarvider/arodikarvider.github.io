@@ -18,8 +18,7 @@ title: Arodi Karvider # the main title
 
 tagline: Un blog sobre informática a un nivel profundo. # it will display as the sub-title
 
-description: >- # used by seo meta and the atom feed
-  Investigaciones de protocolos informaticos a un nivel profundo.
+description: Investigaciones de protocolos informaticos a un nivel profundo. # used by seo meta and the atom feed
 
 # Fill in the protocol & hostname for your site.
 # e.g. 'https://username.github.io', note that it does not end with a '/'.
