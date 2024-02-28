@@ -50,6 +50,7 @@ Por diseño algunos protocolos de enrutamiento trabajan mejor dentro de un AS, e
 Cada AS puede serle asignado un AS number (ASN). Como las direcciones IP publicas, IANA controla la asignacion de las ASNs. Esta delega la autoridad a otra organizacion alrededor del mundo, la misma organizacion  que asigna direcciones IP publicas (LACNIC en latinoamerica) para que tambien asigne ASNs.
 
 ![Autonomous system](/images/roupro/as.png)
+_Autonomous System_
 
 ## IGP
 Las organizaciones tienen varias opciones al elegir un IGP para su red empresarial, pero mayormente las empresas usan OSPF o EIGRP.
