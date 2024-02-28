@@ -103,7 +103,7 @@ La distancia administrativa (Administrative Distance) define la preferencia de l
 
 El valor AD es un a valor entero de 0 a 255. El valor menor es el origen de ruta mas preferida. Una distancia administrativa de o es la mas preferida. Solamente las redes directamentes conectadas tienen un AD de 0, el cual no cambia. Una distancia administratica de 255 quiere decir que el router no le hara caso al origen de ruta y no la agregara a la tabla de enrutamiento.
 
-![Administrative distance](/images/roupro/ad.png)
+![Administrative distance](/images/roupro/administrative_distance.png)
 _Distancia administrativa_
 
 #### Protocolo de enrutamiento Classful
