@@ -2,8 +2,8 @@
 title: Protocolo de enrutamiento
 date: 2024-02-27
 category: teoria
-tags: [network, layer 3, router]
-published: false
+tags: [network, layer 3, router, draft]
+published: true
 ---
 El reenvío de paquetes por parte del router se logra a través del aprendizaje de rutas y el funcionamiento de los switches en la LAN. El aprendizaje de rutas es el proceso de un router que usa para determinar un camino que se usara para reenviar paquetes. Para determinar el mejor camino, el router busca en su tabla de enrutamiento la direccion IP de red que matchee con la direccion IP del paquete de destino.
 
@@ -28,3 +28,17 @@ Funcion de los protocolos de enrutamiento
 - Anunciar la informacion del enrutamiento sobre subredes IP a los router vecinos.
 - Si mas de una posible ruta existe para alcanzar una subred, escoge la mejor ruta basada en una metrica.
 - Si la topologia de red cambia (por ejemplo, cuando falla un enlace) reacciona anunciando que algunas rutas han fallado y escoge una nueva mejor ruta (este proceso es llamado, convegence).
+
+## Protocolos de enrutamiento interior y exterior
+Los protocolos de enrutamiento se dividen en dos categorias: Interior Gateway Protocols (IGP) y Exterior Gateway Protocols (EGP).
+- IGP: Un protocolo de enrutamiento que fue diseñado y pensado para su uso dentro de un unico Autonomous System (AS).
+- EGP: Un protocolo de enrutamiento que fue diseñado y pensado para el uso entre diferentes Autonomous Systems (AS).
+
+### Autonomous System
+Un Autonomous System (AS) es una colleccion de routers bajo una administraccion en comun que presenta una politica de enrutamiento en comun y claramente definida hacia internet, por ejemplo la red interna de una empresa grande y la red de una ISP es una AS. Las redes pequeñas de una empresas no son Autonomous System; en la mayoria de los casos, la red de una empresa pequeña forma parte de una red de un Autonomous System de una ISP.
+Por diseño algunos protocolos de enrutamiento trabajan mejor dentro de un AS, estos protocolos de enrutamiento son llamados IGP. En cambio, los protocolos de enrutamiento diseñados para intercambiar rutas entre routers de diferentes Autonomous Systems son llamados EGP. Actualmente, Border Gateway Protocol (BGP) es el unicos EGP usado.
+
+Cada AS puede serle asignado un AS number (ASN). Como las direcciones IP publicas, IANA controla la asignacion de las ASNs. Esta delega la autoridad a otra organizacion alrededor del mundo, la misma organizacion  que asigna direcciones IP publicas (LACNIC en latinoamerica) para que tambien asigne ASNs.
+
+## IGP
+Las organizaciones tienen varias opciones al elegir un IGP para su red empresarial, pero mayormente las empresas usan OSPF o EIGRP.
