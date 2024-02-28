@@ -1,5 +1,5 @@
 ---
-title: Protocolo de enrutamiento
+title: Protocolo de enrutamiento - teoría
 date: 2024-02-27
 category: teoría
 tags: [network, layer 3, router, draft]
