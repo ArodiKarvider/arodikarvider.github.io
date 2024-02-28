@@ -2,7 +2,7 @@
 title: STP - teoría
 date: 2024-02-21
 category: teoría
-tags: [network, layer 2, protocolo, stp, etherchannel]
+tags: [network, layer 2, protocolo, stp, unedited]
 published: true
 ---
 
@@ -90,16 +90,16 @@ Nota: Los puertos conectados a un dispositivo final se convierten en puerto desi
 
 ![stp port decision](/images/stp/stp_port_decision.png)
 _Decisión de puertos_
-<!-- editando -->
+
 ### Configuración de la topologia STP
-Generalmente STP trabaja por defecto en los switches, teniendo un BID por defecto basada en el valor de la prioridad y direccion MAC del hardware del switch. Adicionalmente, la interfaz del switch tiene un costo base por defecto con la velocidad actual configurada en esa interfaz. Si un ingeniero de red quiere cambiar la topologia generalmente debe cambiar estas configuraciones.
+Generalmente STP trabaja por defecto en los switches, teniendo un BID por defecto basado en el valor de la prioridad y dirección MAC del hardware del switch. Adicionalmente, la interfaz del switch tiene un costo base por defecto con la velocidad actual configurada en esa interfaz. Si un ingeniero de red quiere cambiar la topología generalmente debe cambiar estas configuraciones.
 
 Para cambiar el BID por defecto, se debe configurar la prioridad del BID, por defecto la prioridad es de 32,768, si se coloca una prioridad menor a todos, este se convertira en el root bridge.
-El costo del puerto tiene valores por defecto para cada interfaz y para cada VLAN. Se puede configurar estos valores, que puede impactar en la calculacion del root path cost. Para favorecer un enlace, se debe colocar un valor bajo o de lo contrario evita usar el enlace, ya que tendra un root path cost alto para alcanzar al root bridge.
+El costo del puerto tiene valores por defecto para cada interfaz o enlace. Se puede configurar estos valores, que puede impactar en la calculacion del root path cost. Para favorecer un enlace, se debe colocar un valor bajo o de lo contrario evita usar el enlace, ya que tendra un root path cost alto para alcanzar al root bridge.
 
 ![Path cost](/images/stp/path_cost.png)
 _Costo de la ruta en interfaces_
-
+<!-- editando -->
 ## STP vs RSTP
 ### STP
 El switch root en STP envia un nuevo Hello BPDU cada 2 segundos por defecto. Cada nonroot  switch reenvia el Hello en todos los puertos designated, pero unicamente despues de cambiar algun valor en el Hello recibido. (Dando como resultado, enviar un solo Hello por cada enlace.)
