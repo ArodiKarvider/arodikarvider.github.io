@@ -1,9 +1,9 @@
 ---
 title: Protocolo de enrutamiento
 date: 2024-02-27
-category: teoria
+category: teoría
 tags: [network, layer 3, router, draft]
-published: false
+published: true
 ---
 El reenvío de paquetes por parte del router se logra a través del aprendizaje de rutas y el funcionamiento de los switches en la LAN. El aprendizaje de rutas es el proceso de un router que usa para determinar un camino que se usara para reenviar paquetes. Para determinar el mejor camino, el router busca en su tabla de enrutamiento la direccion IP de red que matchee con la direccion IP del paquete de destino.
 
